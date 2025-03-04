@@ -14,7 +14,7 @@ int	extension_valid(char *file_name)
 	if (file_name[i-1] == 'r' && file_name[i-2] == 'e'
 		&& file_name[i-3] == 'b' && file_name[i-4] == '.')
 		return (1);
-	return (printf("Invalid extension"), 0);
+	return (printf("Invalid extension\n"), 0);
 }
 
 //****************************************************************
