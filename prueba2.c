@@ -1,10 +1,11 @@
-#include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 
-#include "gnl/get_next_line.c"
-#include "gnl/get_next_line_utils.c"
+#include "gnl_printf/get_next_line.c"
+#include "gnl_printf/get_next_line_utils.c"
 #include "so_long.h"
+#include "gnl_printf/ft_printf.c"
+#include "gnl_printf/ft_printf_utils.c"
 
 int	extension_valid(char *file_name)
 {
@@ -14,7 +15,7 @@ int	extension_valid(char *file_name)
 	if (file_name[i - 1] == 'r' && file_name[i - 2] == 'e'
 		&& file_name[i - 3] == 'b' && file_name[i - 4] == '.')
 		return (1);
-	return (printf("Invalid extension\n"), 0);
+	return (ft_printf("Invalid extension\n"), 0);
 }
 
 //****************************************************************
@@ -23,7 +24,7 @@ int	extension_valid(char *file_name)
 int	fd_check(int fd)
 {
 	if (fd < 0)
-		return (printf("Error while opening file\n"), 0);
+		return (ft_printf("Error while opening file\n"), 0);
 	return (1);
 }
 
@@ -202,9 +203,9 @@ int	player_exit_number(t_info *info)
 		}
 	}
 	if (player_count != 1)
-		return (printf("Error in number of players\n"), 0);
+		return (ft_printf("Error in number of players\n"), 0);
 	if (exit_count != 1)
-		return (printf("Error in number of exits\n"), 0);
+		return (ft_printf("Error in number of exits\n"), 0);
 	return (1);
 }
 
@@ -263,9 +264,9 @@ int	valid_path(t_info *info)
 	info->ff_tokens = 0;
 	floodfill(info, info->player_row, info->player_col);
 	if (!info->can_reach_exit)
-		return (printf("Player can't reach exit\n"), 0);
+		return (ft_printf("Player can't reach exit\n"), 0);
 	if (info->ff_tokens != info->tokens)
-		return (printf("Collectable out of bounds\n"), 0);
+		return (ft_printf("Collectable out of bounds\n"), 0);
 	return (1);
 }
 
@@ -307,7 +308,7 @@ int	check_objects(t_info *info)
 	if (!player_exit_number(info))
 		return (0);
 	if (info->tokens == 0)
-		return (printf("There are no collectables\n"), 0);
+		return (ft_printf("There are no collectables\n"), 0);
 	player_exit_pos_get(info);
 	if (!valid_path(info))
 		return (0);
@@ -320,9 +321,9 @@ int	check_objects(t_info *info)
 int	is_good_map(t_info *info)
 {
 	if (!check_borders(info))
-		return (printf("Borders not legal\n"), 0);
+		return (ft_printf("Borders not legal\n"), 0);
 	if (!check_tiles(info))
-		return (printf("Tiles not valid\n"), 0);
+		return (ft_printf("Tiles not valid\n"), 0);
 	if (!check_objects(info))
 		return (0);
 	return (1);
@@ -352,7 +353,7 @@ int	map_check(t_info *info)
 	if (!size_check(info))
 	{
 		ff_map_free(info);
-		return (printf("Size not valid\n"), 0);
+		return (ft_printf("Size not valid\n"), 0);
 	}
 	if (!is_good_map(info))
 	{
@@ -388,21 +389,6 @@ void	map_transformer(t_info *info)
 //****************************************************************
 //****************************************************************
 
-void	print_map(t_info *info)
-{
-	int	i;
-
-	i = 0;
-	while (i < info->row_max)
-	{
-		printf("%s\n", info->map[i]);
-		i++;
-	}
-}
-
-//****************************************************************
-//****************************************************************
-
 void	play_stats_init(t_info *info)
 {
 	info->owned_tokens = 0;
@@ -416,21 +402,23 @@ void	play_stats_init(t_info *info)
 
 void	load_map_sprites(t_img *img, void *mlx)
 {
-	img->floor = mlx_xpm_file_to_image(mlx, "sprites/ground.xpm",
+	img->floor = mlx_xpm_file_to_image(mlx, "textures/ground.xpm",
 			&img->width, &img->height);
-	img->wall = mlx_xpm_file_to_image(mlx, "sprites/wall1.xpm",
+	img->wall = mlx_xpm_file_to_image(mlx, "textures/wall1.xpm",
 			&img->width, &img->height);
-	img->coin = mlx_xpm_file_to_image(mlx, "sprites/collectable.xpm",
+	img->coin = mlx_xpm_file_to_image(mlx, "textures/collectable.xpm",
 			&img->width, &img->height);
-	img->exit_0 = mlx_xpm_file_to_image(mlx, "sprites/exit_0.xpm",
+	img->exit_0 = mlx_xpm_file_to_image(mlx, "textures/exit_0.xpm",
 			&img->width, &img->height);
-	img->exit_25 = mlx_xpm_file_to_image(mlx, "sprites/exit_25.xpm",
+	img->exit_25 = mlx_xpm_file_to_image(mlx, "textures/exit_25.xpm",
 			&img->width, &img->height);
-	img->exit_50 = mlx_xpm_file_to_image(mlx, "sprites/exit_50.xpm",
+	img->exit_50 = mlx_xpm_file_to_image(mlx, "textures/exit_50.xpm",
 			&img->width, &img->height);
-	img->exit_75 = mlx_xpm_file_to_image(mlx, "sprites/exit_75.xpm",
+	img->exit_75 = mlx_xpm_file_to_image(mlx, "textures/exit_75.xpm",
 			&img->width, &img->height);
-	img->exit_100 = mlx_xpm_file_to_image(mlx, "sprites/exit_100.xpm",
+	img->exit_100 = mlx_xpm_file_to_image(mlx, "textures/exit_100.xpm",
+			&img->width, &img->height);
+	img->exit_100_2 = mlx_xpm_file_to_image(mlx, "textures/exit_100_2.xpm",
 			&img->width, &img->height);
 }
 
@@ -439,23 +427,23 @@ void	load_map_sprites(t_img *img, void *mlx)
 
 void	load_player_sprites(t_img *img, void *mlx)
 {
-	img->p_idle = mlx_xpm_file_to_image(mlx, "sprites/gold_down_idle.xpm",
+	img->p_idle = mlx_xpm_file_to_image(mlx, "textures/gold_down_idle.xpm",
 			&img->width, &img->height);
-	img->p_up_1 = mlx_xpm_file_to_image(mlx, "sprites/gold_up1.xpm",
+	img->p_up_1 = mlx_xpm_file_to_image(mlx, "textures/gold_up1.xpm",
 			&img->width, &img->height);
-	img->p_up_2 = mlx_xpm_file_to_image(mlx, "sprites/gold_up2.xpm",
+	img->p_up_2 = mlx_xpm_file_to_image(mlx, "textures/gold_up2.xpm",
 			&img->width, &img->height);
-	img->p_down_1 = mlx_xpm_file_to_image(mlx, "sprites/gold_down1.xpm",
+	img->p_down_1 = mlx_xpm_file_to_image(mlx, "textures/gold_down1.xpm",
 			&img->width, &img->height);
-	img->p_down_2 = mlx_xpm_file_to_image(mlx, "sprites/gold_down2.xpm",
+	img->p_down_2 = mlx_xpm_file_to_image(mlx, "textures/gold_down2.xpm",
 			&img->width, &img->height);
-	img->p_left_1 = mlx_xpm_file_to_image(mlx, "sprites/gold_left.xpm",
+	img->p_left_1 = mlx_xpm_file_to_image(mlx, "textures/gold_left.xpm",
 			&img->width, &img->height);
-	img->p_left_2 = mlx_xpm_file_to_image(mlx, "sprites/gold_left2.xpm",
+	img->p_left_2 = mlx_xpm_file_to_image(mlx, "textures/gold_left2.xpm",
 			&img->width, &img->height);
-	img->p_right_1 = mlx_xpm_file_to_image(mlx, "sprites/gold_right.xpm",
+	img->p_right_1 = mlx_xpm_file_to_image(mlx, "textures/gold_right.xpm",
 			&img->width, &img->height);
-	img->p_right_2 = mlx_xpm_file_to_image(mlx, "sprites/gold_right2.xpm",
+	img->p_right_2 = mlx_xpm_file_to_image(mlx, "textures/gold_right2.xpm",
 			&img->width, &img->height);
 }
 
@@ -604,6 +592,7 @@ void	free_images(t_window *mlx)
 	mlx_destroy_image(mlx->mlx, mlx->img.exit_50);
 	mlx_destroy_image(mlx->mlx, mlx->img.exit_75);
 	mlx_destroy_image(mlx->mlx, mlx->img.exit_100);
+	mlx_destroy_image(mlx->mlx, mlx->img.exit_100_2);
 }
 
 //****************************************************************
@@ -689,7 +678,7 @@ void	move_left(t_info *info, t_window *mlx)
 				close_game(mlx);
 		}
 		info->player_col--;
-		printf("Number of moves: %d\n", ++info->move_count);
+		ft_printf("Number of moves: %d\n", ++info->move_count);
 	}
 	update_moving(info);
 	info->map[info->player_row][info->player_col] = 'P';
@@ -721,7 +710,7 @@ void	move_right(t_info *info, t_window *mlx)
 				close_game(mlx);
 		}
 		info->player_col++;
-		printf("Number of moves: %d\n", ++info->move_count);
+		ft_printf("Number of moves: %d\n", ++info->move_count);
 	}
 	update_moving(info);
 	info->map[info->player_row][info->player_col] = 'P';
@@ -753,7 +742,7 @@ void	move_up(t_info *info, t_window *mlx)
 				close_game(mlx);
 		}
 		info->player_row--;
-		printf("Number of moves: %d\n", ++info->move_count);
+		ft_printf("Number of moves: %d\n", ++info->move_count);
 	}
 	update_moving(info);
 	info->map[info->player_row][info->player_col] = 'P';
@@ -785,11 +774,34 @@ void	move_down(t_info *info, t_window *mlx)
 				close_game(mlx);
 		}
 		info->player_row++;
-		printf("Number of moves: %d\n", ++info->move_count);
+		ft_printf("Number of moves: %d\n", ++info->move_count);
 	}
 	update_moving(info);
 	info->map[info->player_row][info->player_col] = 'P';
 	print_down(info, mlx, mlx->img);
+}
+
+//****************************************************************
+//****************************************************************
+
+void	birb_fly(t_window *mlx, t_info *info, t_img img)
+{
+	static int	i = 1;
+
+	if (info->on_exit == 1)
+		return ;
+	if (i == 1)
+	{
+		mlx_put_image_to_window(mlx->mlx, mlx->mlx_win, img.exit_100,
+			info->exit_col * 64, info->exit_row * 64);
+		i = 2;
+	}
+	else if (i == 2)
+	{
+		mlx_put_image_to_window(mlx->mlx, mlx->mlx_win, img.exit_100_2,
+			info->exit_col * 64, info->exit_row * 64);
+		i = 1;
+	}
 }
 
 //****************************************************************
@@ -807,6 +819,8 @@ int	key_hook(int keycode, t_window *mlx)
 		move_up(&mlx->info, mlx);
 	if (keycode == 115 || keycode == 65364)
 		move_down(&mlx->info, mlx);
+	if ((mlx->info.owned_tokens * 100) / mlx->info.tokens == 100)
+		birb_fly(mlx, &mlx->info, mlx->img);
 	return (0);
 }
 
@@ -827,9 +841,9 @@ void	map_and_ff_map_get(char *route, t_info *info)
 int	input_check(int arg_num, char *route)
 {
 	if (arg_num > 2)
-		return (printf("Too many arguments\n"), 0);
+		return (ft_printf("Too many arguments\n"), 0);
 	if (arg_num < 2)
-		return (printf("Too few arguments\n"), 0);
+		return (ft_printf("Too few arguments\n"), 0);
 	if (!extension_valid(route))
 		return (0);
 	return (1);
@@ -845,7 +859,7 @@ int	main(int argc, char *argv[])
 	if (!input_check(argc, argv[1]))
 		return (1);
 	if (!row_counter(argv[1], &mlx.info) || mlx.info.row_max < 3)
-		return (printf("Invalid map\n"), 1);
+		return (ft_printf("Invalid map\n"), 1);
 	map_and_ff_map_get(argv[1], &mlx.info);
 	if (!map_check(&mlx.info))
 		return (free_map(&mlx), 1);
