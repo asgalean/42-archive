@@ -12,32 +12,31 @@
 
 #include "../so_long.h"
 
-int	player_exit_number(t_info *info)
+void	player_exit_pos_get(t_info *info)
 {
 	int	i;
 	int	j;
-	int	player_count;
-	int	exit_count;
 
-	player_count = 0;
-	exit_count = 0;
-	i = -1;
-	while (++i < info->row_max)
+	i = 0;
+	while (i < info->row_max)
 	{
-		j = -1;
-		while (++j < info->col_max)
+		j = 0;
+		while (j < info->col_max)
 		{
 			if (info->map[i][j] == 'P')
-				player_count++;
+			{
+				info->player_row = i;
+				info->player_col = j;
+			}
 			if (info->map[i][j] == 'E')
-				exit_count++;
+			{
+				info->exit_row = i;
+				info->exit_col = j;
+			}
+			j++;
 		}
+		i++;
 	}
-	if (player_count != 1)
-		return (ft_printf("Error in number of players\n"), 0);
-	if (exit_count != 1)
-		return (ft_printf("Error in number of exits\n"), 0);
-	return (1);
 }
 
 //****************************************************************

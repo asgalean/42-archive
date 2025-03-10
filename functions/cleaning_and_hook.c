@@ -64,7 +64,6 @@ void	free_map(t_window *mlx)
 //****************************************************************
 //****************************************************************
 
-
 void	free_images(t_window *mlx)
 {
 	mlx_destroy_image(mlx->mlx, mlx->img.p_idle);
