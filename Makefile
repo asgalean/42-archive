@@ -27,9 +27,9 @@ OFILES = $(CFILES:%.c=%.o)
 %.o: %.c
 	$(CC) $(CFLAGS) -o $@ -c $< $(INCLUDES)
 
-$(NAME):
+$(NAME): $(OFILES)
 	$(MAKE) -C mlx
-	$(CC) $(CFLAGS) $(OFILES) $(LIBS) $(INCLUDES) -o $(NAME)
+	$(CC) $(OFILES) $(LIBS) $(INCLUDES) -o $(NAME)
 
 all: $(NAME)
 
