@@ -1,0 +1,94 @@
+#Original (con pseudo codigo de Matute)
+
+NAME = so_long
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+LIBS = -Imlx
+INCLUDES = -Lmlx -lmlx -lX11 -lXext -lm
+CFILES = so_long.c \
+			functions/check_args_file.c \
+			functions/cleaning_and_hook.c \
+			functions/game_sprites.c \
+			functions/print_player.c \
+			functions/check_map_1.c \
+			functions/game_info.c \
+			functions/game_update.c \
+			functions/print_tiles.c \
+			functions/check_map_2.c \
+			functions/game_player_movement.c \
+			functions/parse.c \
+			gnl_printf/get_next_line.c \
+			gnl_printf/get_next_line_utils.c \
+			gnl_printf/ft_printf.c \
+			gnl_printf/ft_printf_utils.c
+			
+OFILES = $(CFILES:%.c=%.o)
+
+all: $(NAME)
+
+$(NAME): OBJETOS BIBLIOTECAS
+	$(MAKE) -C mlx
+	$(CC) $(LIBS) $(CFLAGS) -c $(CFILES)
+	ar rc $(NAME) $(OFILES)
+
+
+clean:
+	rm -f $(OFILES)
+
+fclean: clean
+	rm -f $(NAME)
+	$(MAKE) -C mlx fclean
+
+re: fclean all
+
+.PHONY: all
+
+
+
+
+
+======================================================================
+#segudno
+
+#valgrind --leak-check=full --show-leak-kinds=all -s --suppressions=/dev/null ./so_long maps/puto_mapa.ber 
+
+NAME = so_long
+
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+LIBS = -Imlx
+INCLUDES = -Lmlx -lmlx -lX11 -lXext -lm
+CFILES = so_long.c \
+			functions/check_args_file.c \
+			functions/cleaning_and_hook.c \
+			functions/game_sprites.c \
+			functions/print_player.c \
+			functions/check_map_1.c \
+			functions/game_info.c \
+			functions/game_update.c \
+			functions/print_tiles.c \
+			functions/check_map_2.c \
+			functions/game_player_movement.c \
+			functions/parse.c \
+			gnl_printf/get_next_line.c \
+			gnl_printf/get_next_line_utils.c \
+			gnl_printf/ft_printf.c \
+			gnl_printf/ft_printf_utils.c
+
+$(NAME):
+	$(MAKE) -C mlx
+	cc -o so_long $(CFILES) -Imlx -Lmlx -lmlx -lX11 -lXext -lm -Wall -Wextra -Werror
+
+all: $(NAME)
+
+clean:
+	$(MAKE) -C mlx clean
+
+fclean: clean
+	rm -f $(NAME)
+	$(MAKE) -C mlx fclean
+
+re: fclean all
+
+.PHONY: all, clean, fclean, re
