@@ -6,7 +6,7 @@
 /*   By: mcuello <mcuello@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/25 15:21:31 by mcuello           #+#    #+#             */
-/*   Updated: 2026/03/25 16:13:23 by mcuello          ###   ########.fr       */
+/*   Updated: 2026/03/27 15:56:29 by mcuello          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,21 +24,20 @@ void	get_rgb(char *line, t_fd *fd_data)
 	while (arr[i])
 		i++;
 	if (i != 2)
-		return ;
-	if (arr[0][0] == 'F' && ft_strlen(arr[0]) == 1 && !fd_data->floor_color)
+		return (free_map(arr), free(line));
+	if (arr[0][0] == 'F' && ft_strlen(arr[0]) == 1)
 	{
-		fd_data->floor_color = ft_strdup(arr[1]);
+		if (!fd_data->floor_color)
+			fd_data->floor_color = ft_strdup(arr[1]);
 		fd_data->elements++;
 	}
-	else if (arr[0][0] == 'C' && ft_strlen(arr[0]) == 1
-		&& !fd_data->ceiling_color)
+	else if (arr[0][0] == 'C' && ft_strlen(arr[0]) == 1)
 	{
-		fd_data->ceiling_color = ft_strdup(arr[1]);
+		if (!fd_data->ceiling_color)
+			fd_data->ceiling_color = ft_strdup(arr[1]);
 		fd_data->elements++;
 	}
-	free_map(arr);
-	free(line);
-	return ;
+	return (free_map(arr), free(line));
 }
 
 static void	assign_we(char **arr, t_fd *fd_data)
@@ -92,7 +91,7 @@ void	get_path(char *line, t_fd *fd_data)
 	while (arr[i])
 		i++;
 	if (i != 2)
-		return ;
+		return (free_map(arr), free(line));
 	assign_path(arr, fd_data);
 	free_map(arr);
 	free(line);
