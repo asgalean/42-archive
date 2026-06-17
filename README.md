@@ -12,17 +12,3 @@ A consolidated archive of projects from the 42 core curriculum (42 Urduliz Bizka
 | [`cpp`](./cpp) | The C++ module series (work in progress). |
 
 Each project has its own `README.md` with a full description, build instructions, and usage. `cpp` is still in progress and isn't documented yet.
-
----
-
-## Working in this repo
-
-Since each project was added with `git subtree add --prefix=<name> <original-repo> <branch>`, you can keep editing files directly inside each folder as part of this monorepo. If you ever want to sync changes back to (or pull updates from) one of the original individual repos:
-
-```bash
-# push local changes in a subfolder back to its original repo
-git subtree push --prefix=<name> <original-repo-url> <branch>
-
-# pull updates from the original repo into this monorepo
-git subtree pull --prefix=<name> <original-repo-url> <branch>
-```
